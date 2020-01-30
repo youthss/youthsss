@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+<select id="allboard" resultType="vo">
+select * from board
+</select>
+
+
+<select id="pagingboard" resultType="vo" parameterType="int[]">
+select seq, title, contents, writer, time, viewcount
+from (select rownum r, seq, title, contents, writer, time, viewcount
+		from (select * from board order by time desc)
+		)
+where r between
+<foreach collection="array" item="r" separator="and">
+#{r}
+</foreach>
+</select> 
+
+
+
+<select id="boarddetail" resultType="vo" parameterType="int">
+select * from board where seq = #{seq}
+</select>
+
+<!-- <insert id="insertboard" parameterType="vo" useGeneratedKeys="true" keyProperty="seq">
+<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+SELECT board_SEQ.NEXTVAL FROM DUAL
+</selectKey> -->
+<insert id="insertboard" parameterType="vo">
+insert into board(seq, title, contents, writer, password, time, viewcount)
+ values(board_seq.nextval, #{title}, #{contents}, #{writer}, #{password}, sysdate, 0)
+</insert>
+
+<select id="namecheck" parameterType="vo" resultType="int">
+select count(name) from member where name =  #{writer}
+</select>
+
+<update id="plusvc" parameterType="int">
+update board
+set viewcount=viewcount+1
+where seq = #{seq}
+</update>
+
+<update id="boardupdate" parameterType="vo">
+update board
+set title=#{title}, contents=#{contents}, time=sysdate
+where seq = #{seq}
+</update>
+
+<delete id="boarddelete" parameterType="int">
+delete board
+where seq = #{seq}
+
+</delete>
+
+</mapper>
+
+<!-- 값을 넘길때 # 컬럼 넘길때 $ -->
