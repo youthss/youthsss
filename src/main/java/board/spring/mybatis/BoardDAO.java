@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+////////정현의
 public class BoardDAO {
 	@Autowired
 	SqlSession session;
