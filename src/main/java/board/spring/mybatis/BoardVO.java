@@ -2,6 +2,8 @@ package board.spring.mybatis;
 
 import org.springframework.stereotype.Component;
 
+
+/*김명섭 작업본*/
 @Component
 public class BoardVO {
 	int seq;
